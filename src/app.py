@@ -5,20 +5,17 @@ import faiss
 import numpy as np
 import json
 
-# Load data with embeddings
+# Load the data and model for embeddings
 data_path = 'data/embedded_data.jsonl'
 with open(data_path, 'r', encoding='utf-8') as infile:
     data = [json.loads(line) for line in infile]
 
-# Extract embeddings and create an index
 embeddings = np.array([entry['embedding'] for entry in data], dtype='float32')
-index = faiss.IndexFlatL2(embeddings.shape[1])  # L2 is a standard metric for similarity search
+index = faiss.IndexFlatL2(embeddings.shape[1])
 index.add(embeddings)
 
-# Load the pre-trained embedding model
-model = SentenceTransformer('all-MiniLM-L6-v2')
+embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# FastAPI setup
 app = FastAPI()
 
 class QueryRequest(BaseModel):
@@ -32,21 +29,20 @@ def search(query_embedding, k=5):
 
 @app.post("/search/")
 async def get_response(request: QueryRequest):
-    """Handle user query and return full responses."""
-    query_embedding = model.encode(request.query).tolist()
-    results = search(query_embedding, k=5)  # Adjust `k` as needed
+    """Handle user query and return the most relevant context without LLM generation."""
+    query_embedding = embedding_model.encode(request.query).tolist()
+    results = search(query_embedding, k=1)
 
     if not results:
         raise HTTPException(status_code=404, detail="No results found")
 
-    # Return the first complete response
-    response = results[0]  # You can customize how many responses to return or format them
+    context = results[0]['completion']
+
     return {
-        "prompt": response['prompt'],
-        "completion": response['completion']
+        "prompt": results[0]['prompt'],
+        "context": context
     }
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
