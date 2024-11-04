@@ -1,0 +1,22 @@
+
+### Sample Blog Post (`blog_posts/post1_intro.md`):
+
+```markdown
+# Building an AI-Powered Question-Answering System with WELS Data
+
+## Introduction
+In this project, we are harnessing the power of modern natural language processing to build a sophisticated question-answering (QA) system using data from WELS. By creating vector embeddings for the data and integrating with an open-source LLM like LLaMA, we aim to create a robust system that can provide informative and contextually appropriate responses.
+
+## Phase 1: Preparing the Data
+Our journey began by cleaning and structuring the WELS data into a JSONL format that could be used for embedding generation. We ensured that each data entry had clear `prompt` and `completion` fields to facilitate effective training.
+
+## Phase 2: Generating Vector Embeddings
+The next step involved generating vector embeddings for the cleaned data using a pre-trained model from `sentence-transformers`. These embeddings allow us to find semantically similar content quickly and efficiently.
+
+## Phase 3: Integrating with LLaMA
+With the embeddings in place, we integrated LLaMA, an open-source large language model, to handle user queries and generate insightful responses based on the most relevant content found via vector search.
+
+## Next Steps
+Our next milestone involves deploying the system with a simple interface using FastAPI or Flask to allow real-time interaction with users.
+
+Stay tuned for more updates as we progress!
