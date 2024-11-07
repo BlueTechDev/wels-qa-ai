@@ -9,3 +9,4 @@ data/*.jsonl
 data/vector_index/
 
 .env
+.env
